@@ -22,10 +22,9 @@ public class RedisCacheMan implements CacheMan {
 
     @Override
     public String get(String key) throws Exception {
-        String cache = null;
+        String value;
         try {
-            String value = Objects.requireNonNull(redisTemplate.opsForValue().get(key));
-            cache = key + ", " + value;
+            value = Objects.requireNonNull(redisTemplate.opsForValue().get(key));
         } catch (Exception ex) {
             if (
                     ex instanceof RedisConnectionFailureException || ex instanceof RedisSystemException
@@ -36,12 +35,12 @@ public class RedisCacheMan implements CacheMan {
                 throw new Exception();
             }
         }
-        return cache;
+        return value;
     }
 
     @Override
     public String set(String key, String value) throws Exception {
-        String cache = null;
+        String cache;
         try {
             redisTemplate.opsForValue().set(key, value);
             cache = key + ", " + value;
@@ -55,6 +54,6 @@ public class RedisCacheMan implements CacheMan {
                 throw new Exception();
             }
         }
-        return cache;
+            return cache;
     }
 }

@@ -1,8 +1,8 @@
-package config.provider;
+package provider;
 
+import config.RedisConfiguration;
 import com.alticon.cache.model.CacheDemoDTO;
 import com.alticon.cache.provider.redis.RedisCacheMan;
-import config.RedisConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,13 +36,13 @@ public class RedisCacheManTest {
     }
 
     @Test
-    public void shouldSetUser_toRedis() throws Exception {
-        CacheDemoDTO cacheDemoDTO = new CacheDemoDTO("gtr", "erf");
-        redisTemplate.opsForValue().set(cacheDemoDTO.getKey(), cacheDemoDTO.getValue());
-        String value = redisTemplate.opsForValue().get("gtr");
-        when(value).thenReturn("erf");
-        String saved = redisCacheMan.set(cacheDemoDTO.getKey(), cacheDemoDTO.getValue());
-        Assertions.assertEquals(cacheDemoDTO.getKey(), cacheDemoDTO.getValue(), saved);
+    public void getTest() throws Exception {
+        String key = "gtr";
+        String value = "erf";
+
+        when(redisTemplate.opsForValue().get(key)).thenReturn(value);
+        String expectedValue = redisCacheMan.get(key);
+        Assertions.assertEquals(key, expectedValue);
 
     }
 }

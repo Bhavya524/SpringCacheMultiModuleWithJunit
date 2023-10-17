@@ -25,9 +25,9 @@ public class CacheDemoControllerTest {
     public void getCacheTest() throws Exception {
 
         CacheDemoDTO cacheDemoDTO = new CacheDemoDTO("first");
-        when(cacheMan.get(cacheDemoDTO.getKey())).thenReturn("first, first value");
+        when(cacheMan.get(cacheDemoDTO.getKey())).thenReturn("first value");
         String value = cacheDemoController.get(cacheDemoDTO);
-        Assertions.assertEquals("first, first value", value);
+        Assertions.assertEquals("first value", value);
 
     }
     @Test
