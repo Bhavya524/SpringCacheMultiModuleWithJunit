@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_FILE" value="app.log"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
+
+    <property name="APP_LOG_ROOT" value="logs"/>
+    <property name="LOG_PATTERN" value="%d %p %c [%t] %m%n"/>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="applicationLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/app.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/archived/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            total size of all archive files, if total size > 20GB, it will delete old archived file
+            <totalSizeCap>20GB</totalSizeCap>
+            60 days to keep
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="springLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/spring-framework.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/archived/spring-framework.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            total size of all archive files, if total size > 20GB, it will delete old archived file
+            <totalSizeCap>5GB</totalSizeCap>
+            60 days to keep
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="cronLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/cron.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/archived/cron.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            total size of all archive files, if total size > 20GB, it will delete old archived file
+            <totalSizeCap>20GB</totalSizeCap>
+            60 days to keep
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="com.alticon.cache" level="INFO" additivity="false">
+        <appender-ref ref="applicationLog"/>
+    </logger>
+
+    <logger name="org.springframework" level="WARN" additivity="false">
+        <appender-ref ref="springLog"/>
+    </logger>
+
+    <root level="debug">
+    </root>
+
+</configuration>

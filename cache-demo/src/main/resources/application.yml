@@ -1,0 +1,18 @@
+server:
+  port: 20092
+
+spring:
+  data:
+    redis:
+      host: 192.168.0.123
+      port: 6379
+com:
+  alticon:
+    cache:
+      mode: redis
+
+
+
+
+
+
