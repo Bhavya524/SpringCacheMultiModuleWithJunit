@@ -1,58 +1,69 @@
-package provider;
+package test2;
 
 import com.alticon.cache.provider.redis.RedisCacheMan;
 import config.RedisConfiguration;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import redis.embedded.RedisServer;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-@SpringBootTest(classes = RedisConfiguration.class)
-public class RedisCacheManTest2 {
+import static org.mockito.Mockito.when;
 
+
+@SpringBootTest(classes = RedisConfiguration.class)
+public class RedisTemplateTest {
     @InjectMocks
     private RedisCacheMan redisCacheMan;
-
     @MockBean
     private RedisTemplate<String, String> redisTemplate;
-    @Mock
-    private RedisConnectionFactory redisConnectionFactory;
 
-    @Mock
+    @InjectMocks
+    private static RedisServer redisServer;
+    @MockBean
     private ValueOperations<String, String> valueOperations;
 
-    @BeforeEach
-    public void setUp() {
-        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
+        @Test
+    public void testMockRedisTemplate() {
+        RedisTemplate<String, String> mockRedisTemplate = Mockito.mock(RedisTemplate.class);
+        Mockito.when(redisTemplate.opsForValue()).thenReturn((ValueOperations<String, String>) mockRedisTemplate);
     }
+    @BeforeEach
+    void setUp() {
+        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
+        redisServer = RedisServer.builder().build();
+        redisServer.start();
+    }
+
+    @AfterEach
+    void tearDown() {
+        if (redisServer != null) {
+            redisServer.stop();
+        }
+    }
+
 
     @Test
     public void testGetValue() throws Exception {
         String key = "testKey";
         String value = "testValue";
-        //MOCKING
+
+        redisTemplate.opsForValue().set(key, value);
+
         when(redisTemplate.opsForValue().get(key)).thenReturn(value);
-        //CALL TO TEST METHOD
-        String actualValue = redisCacheMan.get(key);
-        //ASSERTION
-        Assertions.assertEquals(value, actualValue);
-    }
-    @Test
-    public void testSetValue() {
-        String key = "testKey";
-        String value = "testValue";
-        redisTemplate.opsForValue().set("key", "value");
-        verify(redisConnectionFactory.getConnection()).set(key.getBytes(), value.getBytes());
+
+        String retrievedValue = redisCacheMan.get(key);
+        Assertions.assertEquals(value, retrievedValue);
+
+
     }
 }
