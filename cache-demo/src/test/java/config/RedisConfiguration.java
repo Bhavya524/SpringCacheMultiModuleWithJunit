@@ -28,14 +28,9 @@ public class RedisConfiguration {
     }
 
     @Bean
-    public RedisTemplate<String, String> redisTemplate(LettuceConnectionFactory connectionFactory) {
-        RedisTemplate<String, String> template = new RedisTemplate<>();
-        RedisSerializer<String> redisSerializer = new StringRedisSerializer();
-
+    public RedisTemplate<?, ?> redisTemplate(LettuceConnectionFactory connectionFactory) {
+        RedisTemplate<byte[], byte[]> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
-        template.setDefaultSerializer(new StringRedisSerializer());
-        template.setKeySerializer(redisSerializer);
-        template.setValueSerializer(redisSerializer);
         return template;
     }
 }

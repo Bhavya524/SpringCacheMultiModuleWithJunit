@@ -3,6 +3,7 @@ package com.alticon.cache.provider.redis;
 import com.alticon.cache.exceptions.CachingException;
 import com.alticon.cache.provider.CacheMan;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,6 +19,7 @@ public class RedisCacheMan implements CacheMan {
         this.redisTemplate = redisTemplate;
     }
 
+    @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     @Override

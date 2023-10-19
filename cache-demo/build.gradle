@@ -17,7 +17,7 @@ dependencies {
     implementation project(':cache-lib')
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
 
-    testImplementation group: 'com.github.kstyrc', name: 'embedded-redis', version: '0.6'
+    testImplementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.3'
 
 }
 test {
